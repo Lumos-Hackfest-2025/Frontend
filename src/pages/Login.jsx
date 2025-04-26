@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
-import { loginWithEmail, signInWithGoogle } from "../../firebase/auth";
+import { useAuth } from "../hooks/useAuth";
+import { loginWithEmail, signInWithGoogle } from "../firebase/auth";
 
 function Login() {
   const [email, setEmail] = useState("");
