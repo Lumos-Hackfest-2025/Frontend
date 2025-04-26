@@ -145,10 +145,10 @@ const SellerDashboard = () => {
     <div className="min-h-screen bg-gray-50">
       <SellerNavbar />
       
-      <div className="container mx-auto px-24 py-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-800">Produkmu</h1>
-          <p className="text-gray-500 text-sm">Cek detail produk dan prediksi pasar</p>
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-24 py-6 sm:py-8">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Produkmu</h1>
+          <p className="text-gray-500 text-xs sm:text-sm">Cek detail produk dan prediksi pasar</p>
         </div>
 
         {loading ? (
@@ -160,45 +160,42 @@ const SellerDashboard = () => {
             {products.map((product) => (
               <div 
                 key={product.id} 
-                className="flex items-center justify-between p-4 border-b border-gray-100"
+                className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border-b border-gray-100 gap-4"
               >
-                <div className="flex items-center">
+                <div className="flex items-center w-full sm:w-auto">
                   <img 
                     src={product.image} 
                     alt={product.productName} 
                     className="w-16 h-16 object-cover rounded-md mr-4"
                   />
                   <div>
-                    <h3 className="font-semibold text-lg">{product.productName}</h3>
+                    <h3 className="font-semibold text-base sm:text-lg">{product.productName}</h3>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-8">
-                  <div>
-                    <p className="text-sm text-gray-500">Stok:</p>
-                    <p className="font-medium">{product.stock}</p>
+                <div className="flex flex-wrap items-center gap-4 sm:gap-8 w-full sm:w-auto">
+                  <div className="min-w-[80px]">
+                    <p className="text-xs sm:text-sm text-gray-500">Stok:</p>
+                    <p className="font-medium text-sm sm:text-base">{product.stock}</p>
                   </div>
 
                   {product.priceType == "normal" && (
-                    <div>
-                      <p className="text-sm text-gray-500">Harga Normal:</p>
-                      <p className="font-medium">Rp{product.price?.toLocaleString() || 0}</p>
+                    <div className="min-w-[120px]">
+                      <p className="text-xs sm:text-sm text-gray-500">Harga Normal:</p>
+                      <p className="font-medium text-sm sm:text-base">Rp{product.price?.toLocaleString() || 0}</p>
                     </div>
                   )}
                   
                   {product.priceType == "bulk" && (
-                    <div>
-                      <p className="text-sm text-gray-500">Harga Borongan:</p>
-                      <p className="font-medium">Rp{product.price?.toLocaleString() || 0}</p>
+                    <div className="min-w-[120px]">
+                      <p className="text-xs sm:text-sm text-gray-500">Harga Borongan:</p>
+                      <p className="font-medium text-sm sm:text-base">Rp{product.price?.toLocaleString() || 0}</p>
                     </div>
                   )}
 
-                  <div className="flex items-center gap-8">
-                  </div>
-
                   <Link 
                     to={`/seller/product/${product.catalogId || product.id}`}
-                    className="px-4 py-2 bg-green-800 text-white rounded-md hover:bg-green-900"
+                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-green-800 text-white text-sm rounded-md hover:bg-green-900 ml-auto sm:ml-0"
                   >
                     Detail
                   </Link>
@@ -210,11 +207,11 @@ const SellerDashboard = () => {
 
         {/* Empty state if no products */}
         {!loading && products.length === 0 && (
-          <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-8 text-center">
             <p className="text-gray-500 mb-4">Kamu belum memiliki produk</p>
             <Link 
               to="/seller/add-product"
-              className="px-4 py-2 bg-green-800 text-white rounded-md hover:bg-green-900"
+              className="px-3 py-1.5 sm:px-4 sm:py-2 bg-green-800 text-white rounded-md hover:bg-green-900 text-sm"
             >
               Tambah Produk
             </Link>
