@@ -6,6 +6,12 @@ import { db } from '../firebase/firebase';
 import { collection, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
 import { useAuthCheck } from '../utils/authUtils';
 
+// Import product images
+import berasImage from '../assets/beras.png';
+import ikanImage from '../assets/ikan.jpg';
+import sayurImage from '../assets/sayur.jpg';
+import buahImage from '../assets/buah.jpg';
+
 const Catalog = () => {
   // Add authentication check for buyer role
   const { user, loading: authLoading, error: authError } = useAuthCheck('buyer');
@@ -59,13 +65,13 @@ const Catalog = () => {
           // For bulk buyers, show products with isBulk = true or priceType = 'bulk'
           productsQuery = query(
             collection(db, "catalog"),
-            where("isBulk", "==", true)
+            where("priceType", "==", "bulk")
           );
         } else {
           // For normal buyers, show products with isNormal = true or priceType = 'normal'
           productsQuery = query(
             collection(db, "catalog"),
-            where("isNormal", "==", true)
+            where("priceType", "==", "normal")
           );
         }
         
@@ -95,6 +101,25 @@ const Catalog = () => {
       ...prev,
       [type]: Number(value)
     }));
+  };
+
+  // Helper function to determine which image to use based on product name
+  const getProductImage = (productName) => {
+    if (!productName) return berasImage;
+    
+    const name = productName.toLowerCase();
+    
+    if (name.includes('ikan') || name.includes('fish')) {
+      return ikanImage;
+    } else if (name.includes('sayur') || name.includes('vegetable') || name.includes('veggies')) {
+      return sayurImage;
+    } else if (name.includes('buah') || name.includes('fruit') || name.includes('apel') || 
+               name.includes('apple') || name.includes('jeruk') || name.includes('orange')) {
+      return buahImage;
+    } 
+    
+    // Default to beras image
+    return berasImage;
   };
 
   // Show authentication loading state
@@ -238,8 +263,8 @@ const Catalog = () => {
                     name={product.productName}
                     price={product.price || (product.priceType === 'normal' ? product.normalPrice : product.bulkPrice)}
                     isBulk={product.isBulk || product.priceType === 'bulk'}
-                    fairPrice={product.fairPrice}
                     product={product} // Pass the entire product object in case CardItem needs more data
+                    image={getProductImage(product.productName)} // Pass the appropriate image based on product name
                   />
                 ))}
               </div>

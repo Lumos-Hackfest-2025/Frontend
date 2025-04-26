@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import beras from "../assets/beras.png";
 
-const CardItem = ({ id, name, price, fairPrice, isBulk }) => {
+const CardItem = ({ id, name, price, fairPrice, isBulk, image }) => {
   // Use fixed rating for now
   const rating = 4.5;
   
@@ -10,7 +10,7 @@ const CardItem = ({ id, name, price, fairPrice, isBulk }) => {
     <Link to={`/catalog/${id}`}>
       <div className="bg-white rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition-shadow">
         <img 
-          src={beras} 
+          src={image || beras} 
           alt={name} 
           className="w-full h-48 object-cover"
         />
@@ -25,13 +25,8 @@ const CardItem = ({ id, name, price, fairPrice, isBulk }) => {
           <div className="flex flex-col">
             <p className="text-orange-500 font-medium">
               Rp{price?.toLocaleString()}
-              {isBulk && <span className="text-xs text-gray-400 ml-1"></span>}
+              {isBulk && <span className="text-xs text-gray-400 ml-1">(Harga Borongan)</span>}
             </p>
-            {/* {fairPrice && (
-              <p className="text-xs text-green-600">
-                Fair Price: Rp{fairPrice?.toLocaleString()}
-              </p>
-            )} */}
           </div>
         </div>
       </div>

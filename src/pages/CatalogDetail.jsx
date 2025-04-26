@@ -2,10 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/UserNavbar';
 import Footer from '../components/Footer';
-import beras from '../assets/beras.png';
 import { db } from '../firebase/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { useAuthCheck } from '../utils/authUtils';
+
+// Import product images
+import berasImage from '../assets/beras.png';
+import ikanImage from '../assets/ikan.jpg';
+import sayurImage from '../assets/sayur.jpg';
+import buahImage from '../assets/buah.jpg';
 
 const CatalogDetail = () => {
   // Add authentication check for buyer role
@@ -50,6 +55,27 @@ const CatalogDetail = () => {
 
   const handleDecrement = () => {
     setQuantity(prev => (prev > 1 ? prev - 1 : 1));
+  };
+
+  // Helper function to determine which image to use based on product name
+  const getProductImage = (productName) => {
+    if (!productName) return berasImage;
+    
+    const name = productName.toLowerCase();
+    
+    if (name.includes('ikan') || name.includes('fish')) {
+      return ikanImage;
+    } else if (name.includes('sayur') || name.includes('vegetable') || name.includes('veggies')) {
+      return sayurImage;
+    } else if (name.includes('buah') || name.includes('fruit') || name.includes('apel') || 
+               name.includes('apple') || name.includes('jeruk') || name.includes('orange')) {
+      return buahImage;
+    } else if (name.includes('daging') || name.includes('meat')) {
+      return dagingImage || berasImage; // Fallback to beras if daging image isn't available
+    }
+    
+    // Default to beras image
+    return berasImage;
   };
 
   // Show authentication loading state
@@ -127,15 +153,15 @@ const CatalogDetail = () => {
             {/* Left: Product Image */}
             <div>
               <img 
-                src= {beras} 
-                alt="Beras" 
+                src={product ? getProductImage(product.productName) : berasImage} 
+                alt={product?.productName || "Product"} 
                 className="w-full h-full object-cover"
               />
             </div>
             
             {/* Right: Product Details */}
             <div className="p-8 space-y-4">
-              <h2 className="text-3xl font-bold text-gray-900">Beras</h2>
+              <h2 className="text-3xl font-bold text-gray-900">{product?.productName || "Product"}</h2>
               
               {/* Rating */}
               <div className="flex items-center">
@@ -147,25 +173,43 @@ const CatalogDetail = () => {
               
               {/* Price */}
               <div className="mt-2">
-                <h3 className="text-2xl font-bold">Rp.10,000</h3>
-                <span className="text-gray-500 text-sm">Per 1 Kilogram</span>
+                <h3 className="text-2xl font-bold">
+                  Rp{(product?.price || 0).toLocaleString()}
+                </h3>
+                <span className="text-gray-500 text-sm">
+                  Per 1 Kilogram
+                  {(product?.isBulk || product?.priceType === 'bulk') && 
+                    <span className="ml-2 text-green-600">(Harga Borongan)</span>
+                  }
+                </span>
               </div>
               
               {/* Description */}
               <div className="py-2">
                 <p className="text-gray-600 leading-relaxed">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus varius diam maximus 
-                  sem facilisis, vel rutrum odio sodales. Mauris sodales eleifend sagittis. Cras non purus eu elit 
-                  eleifend lacus. Quisque ante eros, volutpat bibendum imperdiet non, sollicitudin 
-                  bibendum lacus a aliquet lorem. Cras tempor massa tortor id porta. Cras et nunc 
-                  in nisi molestie femoreli et vitae justo. Vestibulum lacinia imperdiet semper.
+                  {product?.description || 
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus varius diam maximus sem facilisis, vel rutrum odio sodales."}
                 </p>
               </div>
               
               {/* Stock & Date Info */}
               <div className="space-y-1 pt-1">
-                <p><span className="text-gray-500">Stok total:</span> <span className="font-medium">243</span></p>
-                <p><span className="text-gray-500">Tanggal di panen:</span> <span className="font-medium">26 April 2025</span></p>
+                <p>
+                  <span className="text-gray-500">Stok total:</span> 
+                  <span className="font-medium"> {product?.stock || 0}</span>
+                </p>
+                <p>
+                  <span className="text-gray-500">Tanggal di panen:</span> 
+                  <span className="font-medium"> {
+                    product?.harvestDate ? 
+                      new Date(product.harvestDate).toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                      }) : 
+                      'Tidak tersedia'
+                  }</span>
+                </p>
               </div>
               
               {/* Seller Info */}

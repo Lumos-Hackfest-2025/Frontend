@@ -4,11 +4,16 @@ import { useParams } from 'react-router-dom';
 import Navbar from '../components/UserNavbar';
 import Footer from '../components/Footer';
 import SellerNavbar from '../components/SellerNavbar';
-import berasImage from '../assets/beras.png';
 import { FiEdit } from 'react-icons/fi';
 import { useAuthCheck } from '../utils/authUtils';
 import { db } from '../firebase/firebase';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+
+// Import product images
+import berasImage from '../assets/beras.png';
+import ikanImage from '../assets/ikan.jpg';
+import sayurImage from '../assets/sayur.jpg';
+import buahImage from '../assets/buah.jpg';
 
 const SellerProduct = () => {
   // Add authentication check for seller role
@@ -206,6 +211,27 @@ const SellerProduct = () => {
   const supplyDemandData = supplyDemandView === 'supply' ? supplyData : demandData;
   const currentPriceData = priceView === 'normal' ? priceData : bulkPriceData;
 
+  // Helper function to determine which image to use based on product name
+  const getProductImage = (productName) => {
+    if (!productName) return berasImage;
+    
+    const name = productName.toLowerCase();
+    
+    if (name.includes('ikan') || name.includes('fish')) {
+      return ikanImage;
+    } else if (name.includes('sayur') || name.includes('vegetable') || name.includes('veggies')) {
+      return sayurImage;
+    } else if (name.includes('buah') || name.includes('fruit') || name.includes('apel') || 
+               name.includes('apple') || name.includes('jeruk') || name.includes('orange')) {
+      return buahImage;
+    } else if (name.includes('daging') || name.includes('meat')) {
+      return dagingImage || berasImage; // Fallback to beras if daging image isn't available
+    }
+    
+    // Default to beras image
+    return berasImage;
+  };
+
   // Show authentication loading state
   if (authLoading) {
     return (
@@ -301,7 +327,7 @@ const SellerProduct = () => {
               {/* Product Image */}
               <div className="w-full md:w-64 h-64 overflow-hidden rounded-lg">
                 <img 
-                  src={berasImage} 
+                  src={getProductImage(product.productName)} 
                   alt={product.productName} 
                   className="w-full h-full object-cover"
                 />

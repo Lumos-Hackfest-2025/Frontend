@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SellerNavbar from '../components/SellerNavbar';
-import berasImage from '../assets/beras.png';
 import { db, auth } from '../firebase/firebase';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
+
+// Import product images
+import berasImage from '../assets/beras.png';
+import ikanImage from '../assets/ikan.jpg';
+import sayurImage from '../assets/sayur.jpg';
+import buahImage from '../assets/buah.jpg';
 
 const SellerDashboard = () => {
   const [products, setProducts] = useState([]);
@@ -47,6 +52,27 @@ const SellerDashboard = () => {
     return () => unsubscribe();
   }, [navigate]);
   
+  // Helper function to determine which image to use based on product name
+  const getProductImage = (productName) => {
+    if (!productName) return berasImage;
+    
+    const name = productName.toLowerCase();
+    
+    if (name.includes('ikan') || name.includes('fish')) {
+      return ikanImage;
+    } else if (name.includes('sayur') || name.includes('vegetable') || name.includes('veggies')) {
+      return sayurImage;
+    } else if (name.includes('buah') || name.includes('fruit') || name.includes('apel') || 
+               name.includes('Apel') || name.includes('apel') || name.includes('orange')) {
+      return buahImage;
+    } else if (name.includes('daging') || name.includes('meat')) {
+      return dagingImage || berasImage; // Fallback to beras if daging image isn't available
+    }
+    
+    // Default to beras image
+    return berasImage;
+  };
+  
   // Fetch products for the authenticated seller
   useEffect(() => {
     // Only fetch products if user is authenticated and is a seller
@@ -66,11 +92,11 @@ const SellerDashboard = () => {
         const fetchedProducts = [];
         
         querySnapshot.forEach((doc) => {
+          const productData = doc.data();
           fetchedProducts.push({
             id: doc.id,
-            ...doc.data(),
-            // Using a default image since we don't have real images yet
-            image: berasImage
+            ...productData,
+            image: getProductImage(productData.productName)
           });
         });
         
@@ -153,17 +179,17 @@ const SellerDashboard = () => {
                     <p className="font-medium">{product.stock}</p>
                   </div>
 
-                  {product.isNormal && (
+                  {product.priceType == "normal" && (
                     <div>
                       <p className="text-sm text-gray-500">Harga Normal:</p>
-                      <p className="font-medium">Rp{product.normalPrice?.toLocaleString() || 0}</p>
+                      <p className="font-medium">Rp{product.price?.toLocaleString() || 0}</p>
                     </div>
                   )}
                   
-                  {product.isBulk && (
+                  {product.priceType == "bulk" && (
                     <div>
                       <p className="text-sm text-gray-500">Harga Borongan:</p>
-                      <p className="font-medium">Rp{product.bulkPrice?.toLocaleString() || 0}</p>
+                      <p className="font-medium">Rp{product.price?.toLocaleString() || 0}</p>
                     </div>
                   )}
 
