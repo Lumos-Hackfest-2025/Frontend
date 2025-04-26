@@ -48,7 +48,7 @@ function SellerRegistration() {
       {/* Logo and Title Section */}
       <div className="flex items-center justify-center pt-10 pb-6 gap-4">
         <img src={Logo} alt="Lumos Logo" className="w-12 h-12 mb-2" />
-        <h1 className="text-3xl font-semibold text-black pb-2">Lumos</h1>
+        <h1 className="text-3xl font-semibold text-black pb-2">Nusatani</h1>
       </div>
 
       {/* Main Content Section */}

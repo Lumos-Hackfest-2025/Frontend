@@ -1,11 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiSearch, FiPlus, FiBell, FiMessageSquare, FiSettings, FiLogOut } from 'react-icons/fi';
 import Logo from '../assets/logo.png';
+import { auth } from '../firebase/firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 const SellerNavbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -17,13 +29,22 @@ const SellerNavbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      navigate('/login');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
   return (
     <nav className="bg-white shadow-md py-3 px-4 md:px-6 lg:px-12">
       <div className="flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <img src={Logo} alt="Lumos Logo" className="w-10 h-10" />
-          <h1 className="text-xl font-bold text-gray-800">Lumos</h1>
+          <h1 className="text-xl font-bold text-gray-800">Nusatani</h1>
         </Link>
 
         {/* Search Bar */}
@@ -79,9 +100,12 @@ const SellerNavbar = () => {
                     <FiSettings className="text-gray-500" />
                     Pengaturan
                   </Link>
-                  <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                    <FiLogOut className="text-red-500" />
-                    Keluar
+                  <button 
+                    onClick={handleSignOut}
+                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                  >
+                    <FiLogOut className="w-4 h-4" />
+                    <span>Sign out</span>
                   </button>
                 </div>
               </div>

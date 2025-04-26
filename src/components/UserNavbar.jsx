@@ -57,7 +57,7 @@ const Navbar = () => {
       <div className="flex items-center justify-between w-full md:w-auto">
         <Link to="/" className="flex items-center gap-3">
           <img src={Logo} alt="Logo" className="w-8 h-8" />
-          <h1 className="text-xl font-bold">Lumos</h1>
+          <h1 className="text-xl font-bold">Nusatani</h1>
         </Link>
         <button 
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
