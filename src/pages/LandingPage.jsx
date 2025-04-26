@@ -93,7 +93,7 @@ function Home() {
           {/* Vegetables Card */}
           <div 
             className="relative rounded-xl overflow-hidden shadow-md cursor-pointer group h-64 sm:h-72 md:h-80"
-            onClick={() => navigate(userType === "seller" ? '/seller/dashboard' : '/catalog?category=vegetables')}
+            onClick={() => navigate(userType === "seller" ? '/seller' : '/catalog?category=vegetables')}
           >
             <img 
               src={vegetablesImage} 
