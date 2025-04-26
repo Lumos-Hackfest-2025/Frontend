@@ -116,7 +116,7 @@ function Home() {
           {/* Fish Card */}
           <div 
             className="relative rounded-xl overflow-hidden shadow-md cursor-pointer group h-64 sm:h-72 md:h-80"
-            onClick={() => navigate(userType === "seller" ? '/seller/dashboard' : '/catalog?category=fish')}
+            onClick={() => navigate(userType === "seller" ? '/seller' : '/catalog?category=fish')}
           >
             <img 
               src={fishImage} 
@@ -139,7 +139,7 @@ function Home() {
           {/* Fruits Card */}
           <div 
             className="relative rounded-xl overflow-hidden shadow-md cursor-pointer group h-64 sm:h-72 md:h-80"
-            onClick={() => navigate(userType === "seller" ? '/seller/dashboard' : '/catalog?category=fruits')}
+            onClick={() => navigate(userType === "seller" ? '/seller' : '/catalog?category=fruits')}
           >
             <img 
               src={fruitsImage} 
@@ -288,7 +288,7 @@ function Home() {
                   {userType === "seller" ? 'Tambah Produk' : 'Daftar Sekarang'}
                 </button>
                 <button 
-                  onClick={() => navigate(userType === "seller" ? '/seller/dashboard' : '/catalog')}
+                  onClick={() => navigate(userType === "seller" ? '/seller' : '/catalog')}
                   className="px-4 sm:px-6 py-2 sm:py-3 border border-green-600 text-green-600 text-sm sm:text-base font-medium rounded-lg hover:bg-green-50 transition"
                 >
                   {userType === "seller" ? 'Lihat Dashboard' : 'Jelajahi Produk'}
@@ -300,7 +300,7 @@ function Home() {
                 src={userType === "seller" ? heroImage : fruitsImage} 
                 alt="Fresh produce" 
                 className="w-full h-48 sm:h-64 object-cover rounded-lg"
-                onClick={() => navigate(userType === "seller" ? '/seller/dashboard' : '/catalog')}
+                onClick={() => navigate(userType === "seller" ? '/seller' : '/catalog')}
               />
             </div>
           </div>
