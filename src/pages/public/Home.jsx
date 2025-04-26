@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { signOut } from "../../auth/auth";
+import { signOut } from "../../firebase/auth";
 
 function Home() {
   const navigate = useNavigate();

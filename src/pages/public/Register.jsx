@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../auth/useAuth";
-import { registerWithEmail, signInWithGoogle } from "../../auth/auth";
+import { useAuth } from "../../hooks/useAuth";
+import { registerWithEmail, signInWithGoogle } from "../../firebase/auth";
 
 function Register() {
   const [email, setEmail] = useState("");
