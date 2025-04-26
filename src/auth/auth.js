@@ -3,6 +3,8 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithPopup,
+  onAuthStateChanged as firebaseOnAuthStateChanged,
+  signOut as firebaseSignOut,
 } from "firebase/auth";
 
 export function registerWithEmail(email, password) {
@@ -15,4 +17,12 @@ export function loginWithEmail(email, password) {
 
 export function signInWithGoogle() {
   return signInWithPopup(auth, googleProvider);
+}
+
+export function onAuthStateChanged(callback) {
+  return firebaseOnAuthStateChanged(auth, callback);
+}
+
+export function signOut() {
+  return firebaseSignOut(auth);
 }
